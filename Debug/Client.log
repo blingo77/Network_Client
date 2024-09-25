@@ -1,0 +1,5 @@
+﻿  ClientFunctions.cpp
+  Main.cpp
+  Generating Code...
+C:\Users\Brandon Lingo\Desktop\Client\ClientFunctions.cpp(85): warning C4715: 'connectToServer': not all control paths return a value
+  Client.vcxproj -> C:\Users\Brandon Lingo\Desktop\Client\Debug\Client.exe
