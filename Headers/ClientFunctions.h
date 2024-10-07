@@ -6,6 +6,6 @@
 extern int load_WSA_dll(void);
 extern SOCKET socket(void);
 extern int connectToServer(int port, SOCKET clientSocket);
-
+int sendData(SOCKET clientSocket);
 #endif
 

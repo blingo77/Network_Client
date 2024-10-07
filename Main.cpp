@@ -12,7 +12,8 @@ int main() {
 	load_WSA_dll();
 	sock = socket();
 	connectToServer(port, sock);
-
+	sendData(sock);
+	WSACleanup();
 
 	return 0;
 }
