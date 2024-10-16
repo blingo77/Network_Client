@@ -3,8 +3,11 @@
 #include <WS2tcpip.h>
 #include "Headers/ClientFunctions.h"
 #include <tchar.h>
+#include <mutex>
 
 using namespace std;
+
+bool allowedToSend = true;
 
 /*
 	Steps for Client Functions
@@ -116,17 +119,43 @@ int sendData(SOCKET clientSocket) {
 
 	char buffer[200];
 
-	printf("Enter your message: ");
-	cin.getline(buffer, 200);
+	if (allowedToSend) {
 
-	// clientSocket is the accepted socket
-	int byteCount = send(clientSocket, buffer, 200, 0);	//send() returns the number of bytes sent
 
-	if (byteCount == SOCKET_ERROR) {
-		cout << "Server send error" << WSAGetLastError() << endl;
-		return -1;
+		printf("Enter your message: ");
+		cin.getline(buffer, 200);
+
+		// clientSocket is the accepted socket
+		int byteCount = send(clientSocket, buffer, 200, 0);	//send() returns the number of bytes sent
+
+		if (byteCount == SOCKET_ERROR) {
+			cout << "Server send error" << WSAGetLastError() << endl;
+			return -1;
+		}
+		else {
+			cout << "Sent server: " << byteCount << " bytes" << endl;
+		}
+		allowedToSend = false;
 	}
-	else {
-		cout << "Server sent: " << byteCount << endl;
+}
+
+void recieveMessages(SOCKET clientSocket) {
+
+	char buffer[1024];
+	int bytesReceived;
+
+	while (true) {
+		bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+		if (bytesReceived < 0) {
+			cout << "Server Error" << WSAGetLastError() << endl;
+			break;
+		}
+		else {
+			buffer[bytesReceived] = '\0';	// makes sure were only printing the actual amount of bytes recieved from the server
+			cout << "Server said: " << buffer << endl;
+			allowedToSend = true;
+		}
 	}
+
 }
